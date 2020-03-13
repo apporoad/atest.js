@@ -1,0 +1,24 @@
+{
+  "name": "atest.js",
+  "version": "1.0.0",
+  "description": "api test",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/apporoad/atest.js.git"
+  },
+  "keywords": [
+    "api",
+    "test",
+    "awesome"
+  ],
+  "author": "apporoad",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/apporoad/atest.js/issues"
+  },
+  "homepage": "https://github.com/apporoad/atest.js#readme"
+}
