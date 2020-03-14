@@ -24,6 +24,7 @@
   "dependencies": {
     "commander": "^5.0.0",
     "curlconverter": "^3.2.0",
+    "lisa.utils": "^1.1.0",
     "needle": "^2.3.3"
   }
 }

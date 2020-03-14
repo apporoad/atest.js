@@ -1,0 +1,6 @@
+{
+    "$abc" : {
+        "value" : "here is value",
+        "cacheTime" : 123123123123123
+    }
+}
