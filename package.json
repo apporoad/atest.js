@@ -20,5 +20,10 @@
   "bugs": {
     "url": "https://github.com/apporoad/atest.js/issues"
   },
-  "homepage": "https://github.com/apporoad/atest.js#readme"
+  "homepage": "https://github.com/apporoad/atest.js#readme",
+  "dependencies": {
+    "commander": "^5.0.0",
+    "curlconverter": "^3.2.0",
+    "needle": "^2.3.3"
+  }
 }
