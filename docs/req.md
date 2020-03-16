@@ -170,3 +170,11 @@ module.exports = () => {
     })
 }
 ```
+异步函数
+```js
+module.exports = async ()=>{
+    return {
+        ...
+    }
+}
+```

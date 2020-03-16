@@ -7,7 +7,7 @@ sort for response
 ```js
 module.exports ={
     success : "!",
-    data : {
+    data1 : {
         "!p1$" : null,
         p2 : "![1,100]",
         "p3$param3" : "!(1,3,4)",
@@ -39,7 +39,34 @@ module.exports ={
                     r(true)
                 },500)
             })
+        },
+        p12 : new Promise((r,j)=>{
+            r(true)
+        })，
+        p13 : async ()=>{
+            return true
         }
     }
 }
 ```
+
+ps： 各种变化与req对象一致
+
+```js
+module.exports = /abc/g
+
+module.exports = "!"
+
+module.exports = { .. }
+
+module.exports = ()=>{  return {} }
+
+module.exports = ()=> { return new Promise(r=>{...})}
+
+module.exports = async ()=>{ ...}
+
+module.exports = new Promise(r=>{...})
+
+```
+
+atest取值与校验语法：
