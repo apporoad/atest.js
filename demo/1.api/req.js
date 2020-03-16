@@ -8,8 +8,8 @@ module.exports = {
         "rp1": "$ccc",
         "$aaa" : 12,
         "rp2" : 100,
-        "rp3" : function(data){
-            return data.rp2
+        "rp3" : function(context){
+            return 'abc'
         }
     }
 }

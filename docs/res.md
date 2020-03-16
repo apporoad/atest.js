@@ -1,6 +1,10 @@
+## res
+sort for response  
+返回对象，对返回值的封装
 
+### standard res (标准完整)
 
-
+```js
 module.exports ={
     success : "!",
     data : {
@@ -38,3 +42,4 @@ module.exports ={
         }
     }
 }
+```
