@@ -152,8 +152,6 @@ var getOrderedInstances = async (testingInstance, allInstances, context) => {
     var needs = []
     var outputs = []
     if (!utils.Type.isArray(testingInstance)) {
-        //todo
-
         /*{
             chain: [instance],
             outputs: guess.outputs,
