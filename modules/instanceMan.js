@@ -151,20 +151,35 @@ var getOrderedInstances = async (testingInstance, allInstances, context) => {
     var testingArray = []
     var needs = []
     var outputs = []
-    if (!utils.Type.isArray(testingInstance)) {
+    if (utils.Type.isArray(testingInstance)) {
         /*{
             chain: [instance],
             outputs: guess.outputs,
             needs: unSatisfiedNeeds
         }*/
+        var all = allInstances.concat([])
+        var allOutputs = []
+        var chain = []
+        var needs = []
         for(var i =0;i<testingInstance.length;i++){
-            //var tempChain = await getInvokChain(te)
-            //todo
+            if(all.length == 0 ) break
+            if(!utils.ArrayContains(all,testingInstance[i],instanceEquils)){
+                continue
+            }
+            var tempChain = await getInvokChain(testingInstance[i],all,context,allOutputs)
+            allOutputs =allOutputs.concat(tempChain.outputs || [])
+            chain = chain.concat(tempChain.chain || [])
+            all = utils.ArrayRemove(all, tempChain.chain || [] , instanceEquils)
+            needs = needs.concat(tempChain.needs || [])
+        }
+        return {
+            chain : chain,
+            needs : utils.ArrayDistinct(needs),
+            outputs :  utils.ArrayDistinct(allOutputs)
         }
     } else {
         return getInvokChain(testingInstance,allInstances,context)
     }
-
 }
 
 exports.getOrderedInstances = getOrderedInstances

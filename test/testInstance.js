@@ -193,13 +193,29 @@ var allInstances = [
  
 
 
-iM.getInvokChain({
+// iM.getInvokChain({
+//         id : "api1000",
+//         isTest : true,
+//         needs : ["$999"],
+//         outputs : ["$1000"]
+//     },allInstances,{},[]).then(chainObj =>{
+//         console.log(chainObj)
+//     })
+ 
+  iM.getOrderedInstances( 
+[{
+        id : "api12",
+        isTest : true,
+        needs : ["$16"],
+        outputs : ["$12"]
+    },{
         id : "api1000",
         isTest : true,
         needs : ["$999"],
         outputs : ["$1000"]
-    },allInstances,{},[]).then(chainObj =>{
-        console.log(chainObj)
-    })
- 
+    }] , allInstances ,{},[]
+
+  ).then(obj =>{
+    console.log(obj)
+  })
 
