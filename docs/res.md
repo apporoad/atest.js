@@ -11,7 +11,7 @@ module.exports ={
         "!p1$" : null,
         p2 : "![1,100]",
         "p3$param3" : "!(1,3,4)",
-        p4 : "!=$abc",
+        p4 : "!=${abc}",
         p5 : ($) => { return true},
         p6 : "!!",
         "!p7" :  {

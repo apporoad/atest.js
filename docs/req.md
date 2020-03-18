@@ -8,7 +8,7 @@ sort for request
 {
     meta : {
         id : "atest.js_demo_case001",
-        url : "http://localhost:11540/$abc/",
+        url : "http://localhost:11540/${abc}/",
         name : "demoApi"
     },
     headers : {
@@ -21,10 +21,15 @@ sort for request
         "param2" : 100,
         "param3" : context =>{
             return 'hello good good day'
-        }
+        },
         "param4": context=>{
             return new Promise((r)=>{r(1)})
-        }
+        },
+        "param5" : ["$p3","hello ${p3} world"],
+        "param6" : [{
+            hello : "$p3",
+            "$p3" : "world"
+        }]
     }
 }
 ```
@@ -58,7 +63,7 @@ or
 {
     "meta" : {
         "id" : "atest.js_demo_case001",
-        "url" : "http://localhost:11540/$abc/",
+        "url" : "http://localhost:11540/${abc}/",
         "name" : "demoApi"
     },
     "headers" : {
@@ -98,7 +103,7 @@ req.js or request.js
 module.exports ={
     meta : {
         id : "atest.js_demo_case001",
-        url : "http://localhost:11540/$abc/",
+        url : "http://localhost:11540/${abc}/",
         name : "demoApi"
     },
     headers : {
@@ -108,6 +113,7 @@ module.exports ={
     data : {
         "param1": "$p1",
         "$p2" : 12,
+        "xx${p2}" : 12,
         "param2" : 100,
         "param3" : context =>{
             return 'hello good good day'
@@ -178,3 +184,8 @@ module.exports = async ()=>{
     }
 }
 ```
+
+
+### 上下问取值规则
+1. 如果节点直接取值可采用 $abc 方式
+2. 如果节点需要字符串拼接，采用 ${abc}方式

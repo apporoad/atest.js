@@ -6,8 +6,9 @@ const contextMan = require('./contextMan')
 /**
  * run atest
  */
-exports.atest =(testingInstances,allInstances)=>{
+exports.atest = async (testingInstances,allInstances)=>{
     //1.  get pre instances
-    var orderedInstances = instanceMan.getOrderedInstances(testingInstances,allInstances,contextMan.getAvailableContext())
+    var orderedInstances = await instanceMan.getOrderedInstances(testingInstances,allInstances,contextMan.getAvailableContext())
     
+    //contextMan.getOrderedInstances
 }

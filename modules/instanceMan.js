@@ -7,6 +7,8 @@ const utils = require('lisa.utils')
 exports.preduleInstance = (instance, context) => {
 
     return new Promise((r, j) => {
+
+        //just for test
         if (instance.isTest) {
             r(instance)
             return
@@ -144,13 +146,25 @@ var getInvokChain = async (instance, allInstances, context, allOutputs, deep) =>
     }
 }
 
-var getOrderedInstances = (testingInstance, allInstances, context) => {
+var getOrderedInstances = async (testingInstance, allInstances, context) => {
     if (!testingInstance) return []
     var testingArray = []
     var needs = []
     var outputs = []
     if (!utils.Type.isArray(testingInstance)) {
+        //todo
+
+        /*{
+            chain: [instance],
+            outputs: guess.outputs,
+            needs: unSatisfiedNeeds
+        }*/
+        for(var i =0;i<testingInstance.length;i++){
+            //var tempChain = await getInvokChain(te)
+            //todo
+        }
     } else {
+        return getInvokChain(testingInstance,allInstances,context)
     }
 
 }
