@@ -1,4 +1,5 @@
 // res 只有values 中 存在 needs
+// res key 中存在 outputs
 
 const utils = require('lisa.utils')
 
@@ -18,6 +19,11 @@ const judge =(str, options)=>{
         }
     }
     //console.log(options.$)
+}
+
+const judageOutpus = (str,options)=>{
+
+
 }
 
 /**
@@ -61,6 +67,10 @@ exports.getLustForObject =(obj,options)=>{ return {} }
  * 判断json中的节点是否是lust
  */
 exports.isLustForKV = (k,v,options)=>{ 
+    judge(k,options)
+    if(v && utils.Type.isString(v)){
+        judge(v,options)
+    }
     return false
 }
 

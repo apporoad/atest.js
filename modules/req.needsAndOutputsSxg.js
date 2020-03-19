@@ -9,8 +9,8 @@ const judge =(str, options)=>{
         if(/^\$[a-zA-Z0-9_\.]*$/.test(str)){
             if(!utils.ArrayContains(options.$,str))
                 options.$.push(str)
-        }else if(/\${[a-zA-Z0-9_\.]*}/.test(str)){
-            str.match(/\${[a-zA-Z0-9_\.]*}/g).forEach(ele=>{
+        }else if(/([^>]|^)\${[a-zA-Z0-9_.]*}/.test(str)){
+            str.match(/((?<=[^>])|^)\${[a-zA-Z0-9_.]*}/g).forEach(ele=>{
                 var s = ele.replace('{','').replace('}','')
                 if(!utils.ArrayContains(options.$,s))
                     options.$.push(s)
