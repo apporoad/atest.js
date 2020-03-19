@@ -22,7 +22,23 @@ const judge =(str, options)=>{
 }
 
 const judageOutpus = (str,options)=>{
+    options =options || {}
+    options.$out = options.$out || []
 
+    if(str.indexOf('>$')> -1){
+        if(/[a-zA-Z0-9_\.]>\$$/.test(str)){
+            var val =  ('$' + str.match(/[a-zA-Z0-9_\.]*(?=>\$)/)).replace('{','').replace('}','')
+            if(!utils.ArrayContains(options.$out,val))
+                options.$out.push(val)
+        }else if( /.*>\$[a-zA-Z0-9_\.\{\}]/.test(str)){
+            var vals = str.match(/(?<=>\$)[a-zA-Z0-9_\.\{\}]*/g)
+            vals.forEach(ele=>{
+                var val = '$' +ele.replace('{','').replace('}','')
+                if(!utils.ArrayContains(options.$out,val))
+                options.$out.push(val)
+            })       
+        }
+    }
 
 }
 
@@ -40,6 +56,7 @@ exports.prelude = options=>{}
  */
 exports.isLustForString = (str,options) =>{ 
     judge(str,options)
+    judageOutpus(str,options)
     return false 
 }
 
@@ -68,8 +85,10 @@ exports.getLustForObject =(obj,options)=>{ return {} }
  */
 exports.isLustForKV = (k,v,options)=>{ 
     judge(k,options)
+    judageOutpus(k,options)
     if(v && utils.Type.isString(v)){
         judge(v,options)
+        judageOutpus(v,options)
     }
     return false
 }

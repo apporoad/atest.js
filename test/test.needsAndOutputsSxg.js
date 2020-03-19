@@ -37,11 +37,14 @@ var json ={
 var json2 ={
     success : "!",
     data1 : {
-        "!p1$" : null,
+        "!p1>$" : null,
         p2 : "![1,100]",
-        "p3$param3" : "!(1,3,4)",
+        "p3>$param3" : "!(1,3,4)",
         p4 : "!=${abc}",
-        p5 : ($) => { return true},
+        "p${p1}5" : ($) => { return true},
+        "$p3" : ($) => { return true},
+        "p5.5" : ">$p5.5",
+        "p5.6" : "gghgh>${p5.6,3,2}mhkj",
         p6 : "!!",
         "!p7" :  {
             p71 : "!",
@@ -78,7 +81,8 @@ var json2 ={
     }
 }
 
-var options = {$:[], serial :true}
+var options = {$:[], serial :true,$out:[]}
 LustJson.get(json2,sxg2,options).then(()=>{
     console.log(options.$)
+    console.log(options.$out)
 })

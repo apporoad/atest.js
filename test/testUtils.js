@@ -53,7 +53,7 @@ var fnOutputs = (str) =>{
     if(str.indexOf('>$')> -1){
         // "!p1>$"   "p2>$" 
         iTest(/[a-zA-Z0-9_\.]>\$$/,str, /[a-zA-Z0-9_\.]*(?=>\$)/)
-        iTest(/.*>\$[a-zA-Z0-9_\.\{\}]/,str,/(?<=>\$)[a-zA-Z0-9_\.\{\}]*/)
+        iTest(/.*>\$[a-zA-Z0-9_\.\{\}]/,str,/(?<=>\$)[a-zA-Z0-9_\.\{\}]*/g)
     }
 }
 
@@ -63,6 +63,8 @@ fnOutputs("p3>$param3")
 fnOutputs("p4>${param3}")
 fnOutputs(">$p5.5")
 fnOutputs("gghgh>${p5.6,3,2}mhkj")
+
+fnOutputs("gghgh>${p5.6,3,2}mhk>${p5.7,3,2}j")
 
 fnOutputs(">$" )
 fnOutputs("!>$" )
