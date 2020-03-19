@@ -86,3 +86,4 @@ LustJson.get(json2,sxg2,options).then(()=>{
     console.log(options.$)
     console.log(options.$out)
 })
+
