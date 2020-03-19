@@ -11,7 +11,7 @@ const judge =(str, options)=>{
                 options.$.push(str)
         }else if(/([^>]|^)\${[a-zA-Z0-9_.]*}/.test(str)){
             str.match(/((?<=[^>])|^)\${[a-zA-Z0-9_.]*}/g).forEach(ele=>{
-                var s = ele.replace('{','').replace('}','')
+                var s = ele.replace(/\{?\}?/g,'')
                 if(!utils.ArrayContains(options.$,s))
                     options.$.push(s)
             })
