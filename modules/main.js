@@ -3,6 +3,7 @@
 const fs = require('fs')
 const path = require('path')
 const find = require('find')
+const locale = require('locale.node')
 
 const instanceMan = require('./instanceMan')
 const contextMan = require('./contextMan')
@@ -23,8 +24,27 @@ exports.atest = async (testingInstances,allInstances)=>{
 /**
  * run test @  one path
  */
-exports.atestOnePath = ()=>{
+exports.atestOnePath = (yourDir)=>{
+    //loadRawInstances
+    //获取raw Instance
+    var env = exports.loadRawInstances(yourDir)
+    // {
+    //     atestRoot : atestRoot,
+    //     currentInstance :  currentRawInstance,
+    //    allRawInstances : allRawInstances
+    // }
+
+    if(!env.currentInstance){
+        //no currentInstance
+        return {
+            success : false,
+            msg : 'atest:current path cannot find atest instance'.l()
+        }
+    }
     //todo
+    // get context
+    var context = contextMan.get(env.atestRoot)
+    // get real instances
 }
 
 exports.atestAllOneDir = rootDir =>{

@@ -139,7 +139,7 @@ module.exports ={
 ```
 函数
 ```js
-module.exports = (context, invokeChain) => {
+module.exports = (context, options) => {
     //do something
     console.log(context)
     return {
@@ -168,7 +168,7 @@ module.exports = new Promise((r,j)=>{
 ```
 返回promise情况
 ```js
-module.exports = () => {
+module.exports = (context, options) => {
     return new Promise((r,j)=>{
         r({
             ...
@@ -178,7 +178,7 @@ module.exports = () => {
 ```
 异步函数
 ```js
-module.exports = async ()=>{
+module.exports = async (context, options)=>{
     return {
         ...
     }

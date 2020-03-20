@@ -60,13 +60,15 @@ module.exports = /abc/g
 
 module.exports = "!"
 
+module.exports = "gg${}hgh>${p1}mhk${}j"
+
 module.exports = { .. }
 
-module.exports = ()=>{  return {} }
+module.exports = (context, resultOrLastRecord,options)=>{  return {} }
 
-module.exports = ()=> { return new Promise(r=>{...})}
+module.exports = (context, resultOrLastRecord,options)=> { return new Promise(r=>{...})}
 
-module.exports = async ()=>{ ...}
+module.exports = async (context, resultOrLastRecord,options)=>{ ...}
 
 module.exports = new Promise(r=>{...})
 

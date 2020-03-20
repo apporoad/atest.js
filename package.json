@@ -25,6 +25,7 @@
     "commander": "^5.0.0",
     "find": "^0.3.0",
     "lisa.utils": "^1.2.0",
+    "locale.node": "^1.0.0",
     "lustjson.js": "^1.1.1",
     "needle": "^2.3.3"
   }
