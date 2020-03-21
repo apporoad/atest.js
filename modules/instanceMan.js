@@ -3,24 +3,19 @@
 const utils = require('lisa.utils')
 
 
-
-exports.preduleInstance = (instance, context) => {
-
-    return new Promise((r, j) => {
-
-        //just for test
-        if (instance.isTest) {
-            r(instance)
-            return
-        }
-
-        r({
-            id: '',
-            instance: {},
-            needs: [],
-            outputs: []
-        })
-    })
+exports.preduleInstance = async (instance, context ,options) => {
+    //here test
+    if (instance.isTest) {
+        return instance
+    }
+    
+    
+        // r({
+        //     id: '',
+        //     instance: {},
+        //     needs: [],
+        //     outputs: []
+        // })
 }
 
 var instanceEquils = (a, b) => {
@@ -30,7 +25,7 @@ var instanceEquils = (a, b) => {
 
 //recurse
 // 递归获取调用链
-var getInvokChain = async (instance, allInstances, context, allOutputs, deep) => {
+var getInvokChain = async (instance, allInstances, context, allOutputs,deep, options) => {
     //deep 
     if (deep && deep > 10) {
         return {
@@ -43,7 +38,7 @@ var getInvokChain = async (instance, allInstances, context, allOutputs, deep) =>
         allInstances.splice(i, 1)
     }
 
-    var guess = await exports.preduleInstance(instance, context)
+    var guess = await exports.preduleInstance(instance, context,options)
     if (!guess.needs || guess.needs.length == 0) {
         if (guess.outputs && guess.outputs.length > 0) {
         }
@@ -66,9 +61,9 @@ var getInvokChain = async (instance, allInstances, context, allOutputs, deep) =>
         }
         var availableChains = []
         for (var j = 0; j < allInstances.length; j++) {
-            var tg = await exports.preduleInstance(allInstances[j], context)
+            var tg = await exports.preduleInstance(allInstances[j], context,options)
             if (tg.outputs && tg.outputs.length > 0 && utils.ArrayContains(tg.outputs, tneed)) {
-                var temp = await getInvokChain(allInstances[j], allInstances.concat([]), context, allOutputs, deep ? (deep + 1) : 0)
+                var temp = await getInvokChain(allInstances[j], allInstances.concat([]), context, allOutputs, deep ? (deep + 1) : 0,options)
                 availableChains.push(temp)
             }
         }
@@ -146,11 +141,9 @@ var getInvokChain = async (instance, allInstances, context, allOutputs, deep) =>
     }
 }
 
-var getOrderedInstances = async (testingInstance, allInstances, context) => {
+var getOrderedInstances = async (testingInstance, allInstances, context,options) => {
     if (!testingInstance) return []
-    var testingArray = []
     var needs = []
-    var outputs = []
     if (utils.Type.isArray(testingInstance)) {
         /*{
             chain: [instance],
@@ -166,7 +159,7 @@ var getOrderedInstances = async (testingInstance, allInstances, context) => {
             if(!utils.ArrayContains(all,testingInstance[i],instanceEquils)){
                 continue
             }
-            var tempChain = await getInvokChain(testingInstance[i],all,context,allOutputs)
+            var tempChain = await getInvokChain(testingInstance[i],all,context,allOutputs,0,options)
             allOutputs =allOutputs.concat(tempChain.outputs || [])
             chain = chain.concat(tempChain.chain || [])
             all = utils.ArrayRemove(all, tempChain.chain || [] , instanceEquils)
@@ -178,10 +171,11 @@ var getOrderedInstances = async (testingInstance, allInstances, context) => {
             outputs :  utils.ArrayDistinct(allOutputs)
         }
     } else {
-        return getInvokChain(testingInstance,allInstances,context)
+        return getInvokChain(testingInstance,allInstances,context,options)
     }
 }
 
 exports.getOrderedInstances = getOrderedInstances
 
 exports.getInvokChain = getInvokChain
+

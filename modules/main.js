@@ -12,11 +12,11 @@ const utils = require('lisa.utils')
 /**
  * run atest
  */
-exports.atest = async (testingInstances,allInstances)=>{
+exports.atest = async (testingInstances,allInstances,options)=>{
 
     // todo
     //1.  get pre instances
-    var orderedInstances = await instanceMan.getOrderedInstances(testingInstances,allInstances,contextMan.getAvailableContext())
+    var orderedInstances = await instanceMan.getOrderedInstances(testingInstances,allInstances,contextMan.getAvailableContext(),options)
     
     //contextMan.getOrderedInstances
 }
@@ -25,13 +25,13 @@ exports.atest = async (testingInstances,allInstances)=>{
  * run test @  one path
  */
 exports.atestOnePath = (yourDir)=>{
-    //loadRawInstances
-    //获取raw Instance
-    var env = exports.loadRawInstances(yourDir)
+    //loadInstances
+    //获取 Instance
+    var env = exports.loadInstances(yourDir)
     // {
     //     atestRoot : atestRoot,
-    //     currentInstance :  currentRawInstance,
-    //    allRawInstances : allRawInstances
+    //     currentInstance :  currentInstance,
+    //    allInstances : allInstances
     // }
 
     if(!env.currentInstance){
@@ -44,7 +44,7 @@ exports.atestOnePath = (yourDir)=>{
     //todo
     // get context
     var context = contextMan.get(env.atestRoot)
-    // get real instances
+    
 }
 
 exports.atestAllOneDir = rootDir =>{
@@ -94,8 +94,8 @@ var getId = p =>{
     return p.replace(/[\\\/:]/g,'_')
 }
 
-//获取单个raw实例
-exports.loadCurrentRawInstance = currentPath =>{
+//获取单个实例
+exports.loadCurrentInstance = currentPath =>{
     var instance = {}
     instance.id = getId(currentPath)
     instance.src = currentPath
@@ -159,36 +159,36 @@ exports.loadCurrentRawInstance = currentPath =>{
     return instance
 }
 
-//获取当前目录以下所有raw实例
-exports.loadAllRawInstancesUnderRoot=  rootPath =>{
+//获取当前目录以下所有实例
+exports.loadAllInstancesUnderRoot=  rootPath =>{
     var dirs = find.dirSync(rootPath)
     var array = []
     dirs.forEach(dir =>{
         array.push(new Promise(r=>{
-            r(exports.loadCurrentRawInstance(dir))
+            r(exports.loadCurrentInstance(dir))
         }))
     })
     return Promise.all(array)
 }
 
-//获取当前项目下所有raw实例
-exports.loadRawInstances = async (currentPath) =>{
+//获取当前项目下所有实例
+exports.loadInstances = async (currentPath) =>{
     // get atest root
     var atestRoot = exports.findAtestRootPath(currentPath)
-    // get currentRawInstance
-    var currentRawInstance = exports.loadCurrentRawInstance(currentPath)
-    // get all raw instances
-    var allRawInstances = await exports.loadAllRawInstancesUnderRoot(atestRoot)
+    // get currentInstance
+    var currentInstance = exports.loadCurrentInstance(currentPath)
+    // get all  instances
+    var allInstances = await exports.loadAllInstancesUnderRoot(atestRoot)
     var temp = []
-     allRawInstances.forEach(i =>{
+     allInstances.forEach(i =>{
          if(i)
          temp.push(i)
      })
-     allRawInstances = temp
+     allInstances = temp
      
      return {
          atestRoot : atestRoot,
-         currentInstance :  currentRawInstance,
-        allRawInstances : allRawInstances
+         currentInstance :  currentInstance,
+        allInstances : allInstances
      }
 }

@@ -9,8 +9,8 @@ var path = require('path')
 //console.log( main.findAtestRootPath(__dirname))
 
 
-//console.log(main.loadCurrentRawInstance(path.dirname(__dirname) + '/demo/1.api'))
+//console.log(main.loadCurrentInstance(path.dirname(__dirname) + '/demo/1.api'))
 
-main.loadRawInstances(path.dirname(__dirname) + '/demo/1.api').then(data=>{
+main.loadInstances(path.dirname(__dirname) + '/demo/1.api').then(data=>{
     console.log(data)
 })
