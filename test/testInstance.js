@@ -207,6 +207,7 @@ var allInstances = [
         id : "api12",
         isTest : true,
         needs : ["$16"],
+        req : {},
         outputs : ["$12"]
     },{
         id : "api1000",
