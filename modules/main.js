@@ -93,12 +93,36 @@ var existsFile = p =>{
     return fs.existsSync(p) && fs.statSync(p).isFile()
 }
 
+var pathEquils = (p1,p2)=>{
+    return p1.replace(/\\/g,'/')  == p2.replace(/\\/g,'/')
+}
+
 var getId = p =>{
     return p.replace(/[\\\/:]/g,'_')
 }
 
+exports.getUpperMetas = (currentPath,root) =>{
+    if(!root)
+        return []
+    if( pathEquils(currentPath,root)){
+        return []
+    }
+    var upperPath = path.dirname(currentPath)
+    if(pathEquils(upperPath, currentPath))
+        return []
+    var pJson =path.join(upperPath,'atest.json')
+    var pJs = path.join(upperPath,'atest.js')
+    var metas = []
+    if(existsFile(pJson) ){
+        metas.push(require(pJson))
+    }else if(existsFile(pJs)){
+        metas.push(require(pJs))
+    }
+    return metas.concat(exports.getUpperMetas(upperPath,root))
+}
+
 //获取单个实例
-exports.loadCurrentInstance = currentPath =>{
+exports.loadCurrentInstance = (currentPath,root) =>{
     var instance = {}
     instance.id = getId(currentPath)
     instance.src = currentPath
@@ -110,6 +134,7 @@ exports.loadCurrentInstance = currentPath =>{
     }else if(existsFile(pJs)){
         instance.meta = require(pJs)
     }
+    instance.upperMetas = exports.getUpperMetas(currentPath,root)
     //加载req
     //req req.json req.js request request.json request.js  
     var reqJson = path.join(currentPath,'req.json')
@@ -168,7 +193,7 @@ exports.loadAllInstancesUnderRoot=  rootPath =>{
     var array = []
     dirs.forEach(dir =>{
         array.push(new Promise(r=>{
-            r(exports.loadCurrentInstance(dir))
+            r(exports.loadCurrentInstance(dir,rootPath))
         }))
     })
     return Promise.all(array)
@@ -179,7 +204,7 @@ exports.loadInstances = async (currentPath) =>{
     // get atest root
     var atestRoot = exports.findAtestRootPath(currentPath)
     // get currentInstance
-    var currentInstance = exports.loadCurrentInstance(currentPath)
+    var currentInstance = exports.loadCurrentInstance(currentPath,atestRoot)
     // get all  instances
     var allInstances = await exports.loadAllInstancesUnderRoot(atestRoot)
     var temp = []

@@ -6,6 +6,19 @@ const reqNeedsAndOutpusSxy = require('./req.needsAndOutputsSxg')
 const resNeedsAndOutputSxy = require('./res.needsAndOutputsSxg')
 const LustJson = require('lustjson.js')
 
+
+var translateMeta =async (meta,context,options)=>{
+    if(!meta) return {}
+    if(utils.Type.isAsyncFunction(meta)){
+        meta = await meta(context,options)
+    }else if( utils.Type.isFunction(meta)){
+        meta =  meta(context,options)
+    }
+    if(meta){
+        return await Promise.resolve(meta)
+    }
+    return {}
+}
 /**
  * 翻译实例，解决instance中的异步函数、函数 和 promise
  */
@@ -40,7 +53,6 @@ exports.translateInstance = async (instance,context,options)=>{
             instance.realReq  = await Promise.resolve(req)
         }
     }
-
     if(instance.res){
         var res = instance.res
         if(utils.Type.isAsyncFunction(res)){
@@ -70,6 +82,28 @@ exports.translateInstance = async (instance,context,options)=>{
         }
         if(res){
             instance.realRes = await Promise.resolve(res)
+        }
+    }
+    //metas
+    try{
+        var meta= null
+        if(instance.realReq && instance.realReq.meta){
+            meta = await  translateMeta(instance.realReq.meta,context,options)
+        }
+        if(instance.meta){
+            meta = Object.assign({}, await translateMeta(instance.meta,context,options),meta)
+        }
+        if(instance.upperMetas){
+            for(var i =0 ;i<instance.upperMetas.length ;i++){
+                meta = Object.assign({}, await translateMeta(instance.upperMetas[i],context,options),meta)
+            }
+        }
+        instance.realMeta = meta
+    }catch(e){
+        instance.errors = instance.errors || {}
+        instance.errors.metaTranslate = {
+            msg :  l('call function error when translate meta'),
+            ex : e
         }
     }
 }

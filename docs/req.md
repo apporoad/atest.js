@@ -7,7 +7,6 @@ sort for request
 ```js
 {
     meta : {
-        id : "atest.js_demo_case001",
         url : "http://localhost:11540/${abc}/",
         name : "demoApi"
     },
