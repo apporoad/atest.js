@@ -12,13 +12,16 @@ const utils = require('lisa.utils')
 /**
  * run atest
  */
-exports.atest = async (testingInstances,allInstances,options)=>{
+exports.atest = async (testingInstances,allInstances,context,options)=>{
 
-    // todo
     //1.  get pre instances
-    var orderedInstances = await instanceMan.getOrderedInstances(testingInstances,allInstances,contextMan.getAvailableContext(),options)
+    var orderedInstances = await instanceMan.getOrderedInstances(testingInstances,allInstances,  context ,options)
     
-    //contextMan.getOrderedInstances
+    // 2.  go run
+    for(var index =0 ;index< orderedInstances.length;i++){
+        //todo 
+    }
+
 }
 
 /**

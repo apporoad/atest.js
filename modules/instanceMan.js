@@ -1,21 +1,107 @@
 // instanceManager  测试实例 管理器
 
 const utils = require('lisa.utils')
+const l = require('locale.node')
+const reqNeedsAndOutpusSxy = require('./req.needsAndOutputsSxg')
+const resNeedsAndOutputSxy = require('./res.needsAndOutputsSxg')
+const LustJson = require('lustjson.js')
 
+/**
+ * 翻译实例，解决instance中的异步函数、函数 和 promise
+ */
+exports.translateInstance = async (instance,context,options)=>{
+    if(!instance)return
+    if(instance.req){
+        var req = instance.req
+        if(utils.Type.isAsyncFunction(instance.req)){
+            try{
+                req = await instance.req(context,options)
+            }catch(e){
+                req = null
+                instance.errors = instance.errors || {}
+                instance.errors.reqTranslate = {
+                    msg :  l('call asyncFunction error when translate req'),
+                    ex : e
+                }
+            }
+        }else if( utils.Type.isFunction(instance.req)){
+            try{
+                req = instance.req(context,options)
+            }catch(e){
+                req =null
+                instance.errors = instance.errors || {}
+                instance.errors.reqTranslate = {
+                    msg :  l('call function error when translate req'),
+                    ex : e
+                }
+            }
+        }
+        if(req){
+            instance.realReq  = await Promise.resolve(req)
+        }
+    }
 
+    if(instance.res){
+        var res = instance.res
+        if(utils.Type.isAsyncFunction(res)){
+            try{
+                //todo get lastRecord
+                res  = await instance.res(context, null,options)
+            }catch(e){
+                res = null
+                instance.errors = instance.errors || {}
+                instance.errors.resTranslate = {
+                    msg : l('call asyncFunction error when translate res'),
+                    ex: e
+                }
+            }
+        } else if (utils.Type.isFunction(res)){
+            try{
+                //todo get latRecord
+                res = instance.res(context,null,options)
+            }catch(e){
+                res = null
+                instance.errors = instance.errors || {}
+                instance.errors.resTranslate = {
+                    msg : l('call function error when translate res'),
+                    ex : e
+                }
+            }
+        }
+        if(res){
+            instance.realRes = await Promise.resolve(res)
+        }
+    }
+}
+
+/**
+ * 预测测试实例
+ */
 exports.preduleInstance = async (instance, context ,options) => {
     //here test
     if (instance.isTest) {
         return instance
     }
+    //here resolve the  async function  and function   and promise ...    
+    await exports.translateInstance(instance,context,options)
+    // get needs and outpus
+    var tempOption = {$:[],$out:[]}
+    if(instance.meta)
+        await LustJson.get(instance.meta,reqNeedsAndOutpusSxy,tempOption)
+    if(instance.req)
+        await LustJson.get(instance.req, reqNeedsAndOutpusSxy,tempOption)
+    if(instance.res)
+        await LustJson.get(instance.res , resNeedsAndOutputSxy,tempOption)
     
-    
+        instance.needs  = tempOption.$
+        instance.outputs =tempOption.$out
         // r({
         //     id: '',
         //     instance: {},
         //     needs: [],
         //     outputs: []
         // })
+        return instance
 }
 
 var instanceEquils = (a, b) => {
