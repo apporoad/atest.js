@@ -2,23 +2,9 @@
 
 const utils = require('lisa.utils')
 
-const judge =(str, options)=>{
-    options  = options || {}
-    options.$ = options.$ || []
-    if(utils.indexOfString(str, '$')> -1){
-        if(/^\$[a-zA-Z0-9_\.]*$/.test(str)){
-            if(!utils.ArrayContains(options.$,str))
-                options.$.push(str)
-        }else if(/([^>]|^)\${[a-zA-Z0-9_.]*}/.test(str)){
-            str.match(/((?<=[^>])|^)\${[a-zA-Z0-9_.]*}/g).forEach(ele=>{
-                var s = ele.replace(/\{?\}?/g,'')
-                if(!utils.ArrayContains(options.$,s))
-                    options.$.push(s)
-            })
-        }
-    }
-    //console.log(options.$)
-}
+const pulgin =require('../plugins/default')
+
+
 
 /**
  * here is the start
@@ -33,7 +19,7 @@ exports.prelude = options=>{}
  * 判断数据中的字符串是否是Lust
  */
 exports.isLustForString = (str,options) =>{ 
-    judge(str,options)
+    pulgin.getReqNeeds(str,options)
     return false 
 }
 
@@ -61,9 +47,9 @@ exports.getLustForObject =(obj,options)=>{ return {} }
  * 判断json中的节点是否是lust
  */
 exports.isLustForKV = (k,v,options)=>{ 
-    judge(k,options)
+    pulgin.getReqNeeds(k,options)
     if(v && utils.Type.isString(v)){
-        judge(v,options)
+        pulgin.getReqNeeds(v,options)
     }
     return false
 }

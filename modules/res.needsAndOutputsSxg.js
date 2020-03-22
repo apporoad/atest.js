@@ -3,44 +3,7 @@
 
 const utils = require('lisa.utils')
 
-const judge = (str, options) => {
-    options = options || {}
-    options.$ = options.$ || []
-    if (utils.indexOfString(str, '$') > -1) {
-        if (/^\$[a-zA-Z0-9_\.]*$/.test(str)) {
-            if (!utils.ArrayContains(options.$, str))
-                options.$.push(str)
-        } else if (/\${[a-zA-Z0-9_\.]*}/.test(str)) {
-            str.match(/\${[a-zA-Z0-9_\.]*}/g).forEach(ele => {
-                var s = ele.replace(/\{?\}?/g, '')
-                if (!utils.ArrayContains(options.$, s))
-                    options.$.push(s)
-            })
-        }
-    }
-    //console.log(options.$)
-}
-
-const judageOutpus = (str, options) => {
-    options = options || {}
-    options.$out = options.$out || []
-
-    if (str.indexOf('>$') > -1) {
-        if (/[a-zA-Z0-9_\.]>\$$/.test(str)) {
-            var val = ('$' + str.match(/[a-zA-Z0-9_\.]*(?=>\$)/)).replace('{', '').replace('}', '')
-            if (!utils.ArrayContains(options.$out, val))
-                options.$out.push(val)
-        } else if (/.*>\$[a-zA-Z0-9_\.\{\}]/.test(str)) {
-            var vals = str.match(/(?<=>\$)[a-zA-Z0-9_\.\{\}]*/g)
-            vals.forEach(ele => {
-                var val = '$' + ele.replace('{', '').replace('}', '')
-                if (!utils.ArrayContains(options.$out, val))
-                    options.$out.push(val)
-            })
-        }
-    }
-
-}
+const plugin = require('../plugins/default')
 
 /**
  * here is the start
@@ -55,8 +18,8 @@ exports.prelude = options => { }
  * 判断数据中的字符串是否是Lust
  */
 exports.isLustForString = (str, options) => {
-    judge(str, options)
-    judageOutpus(str, options)
+    plugin.getResNeeds(str,options)
+    plugin.getResOutputs(str,options)
     return false
 }
 
@@ -84,11 +47,11 @@ exports.getLustForObject = (obj, options) => { return {} }
  * 判断json中的节点是否是lust
  */
 exports.isLustForKV = (k, v, options) => {
-    judge(k, options)
-    judageOutpus(k, options)
+    plugin.getResNeeds(k,options)
+    plugin.getResOutputs(k,options)
     if (v && utils.Type.isString(v)) {
-        judge(v, options)
-        judageOutpus(v, options)
+        plugin.getResNeeds(v,options)
+        plugin.getResOutputs(v,options)
     }
     return false
 }

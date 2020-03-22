@@ -29,10 +29,10 @@ var json ={
         }]
     }
 }
-// var options = {$:[], serial :true}
-// LustJson.get(json,sxg,options).then(()=>{
-//     console.log(options.$)
-// })
+var options = {$:[], serial :true}
+LustJson.get(json,sxg,options).then(()=>{
+    console.log(options.$)
+})
 
 var json2 ={
     success : "!",
