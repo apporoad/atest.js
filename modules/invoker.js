@@ -22,10 +22,5 @@ exports.invokeInstance = async (instance, context,options) =>{
         var method = instance.realMeta. method || 'get'
         var url  = utils.startWith(instance.realMeta.url,'http') ? instance.realMeta.url  :  path.join(instance.realMeta.baseUrl , instance.realMeta.url)
 
-        //todo   get data
-        var data = {}
-        var  result = await exports.req(method,url, data,options)
-
-
-    
+        return result = await exports.req(method,url, instance.realReq,options)    
 }

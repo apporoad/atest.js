@@ -33,10 +33,10 @@ module.exports ={
                 remark : 'good job'
             }
         },
-        p11 : (res,req,context)=>{
+        p11 : (res,context,options)=>{
             console.log(context)
             console.log(res)
-            console.log(req)
+            console.log( options.req)
             return new Promise((r,j)=>{
                 setTimeout(()=>{
                     r(true)
@@ -64,11 +64,11 @@ module.exports = "gg${}hgh>${p1}mhk${}j"
 
 module.exports = { .. }
 
-module.exports = (context, resultOrLastRecord,options)=>{  return {} }
+module.exports = (resultOrLastRecord,context, options)=>{  return {} }
 
-module.exports = (context, resultOrLastRecord,options)=> { return new Promise(r=>{...})}
+module.exports = (resultOrLastRecord,context,options)=> { return new Promise(r=>{...})}
 
-module.exports = async (context, resultOrLastRecord,options)=>{ ...}
+module.exports = async (resultOrLastRecord,context ,options)=>{ ...}
 
 module.exports = new Promise(r=>{...})
 

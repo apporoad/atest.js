@@ -8,6 +8,7 @@ const locale = require('locale.node')
 const instanceMan = require('./instanceMan')
 const contextMan = require('./contextMan')
 const utils = require('lisa.utils')
+const invoker  = require('./invoker')
 
 /**
  * run atest
@@ -19,7 +20,13 @@ exports.atest = async (testingInstances,allInstances,context,options)=>{
     
     // 2.  go run
     for(var index =0 ;index< orderedInstances.length;i++){
-        //todo 
+        var instance = orderedInstances[0]
+         //translate first
+         await instanceMan.translateReq(instance,context,options)
+         //get resData
+         var resData = await invoker.invokeInstance(instance,context,options)
+         // todo  根据resData 检查数据 及反填context
+
     }
 
 }
