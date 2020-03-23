@@ -27,7 +27,7 @@
     "ilink.js": "^1.2.1",
     "lisa.utils": "^1.2.0",
     "locale.node": "^1.0.0",
-    "lustjson.js": "^2.0.0",
+    "lustjson.js": "^2.1.1",
     "needle": "^2.3.3"
   }
 }

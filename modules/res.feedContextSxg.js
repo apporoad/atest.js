@@ -5,6 +5,8 @@ const utils = require('lisa.utils')
 
 const plugin = require('../plugins/default')
 
+
+
 /**
  * here is the start
  * 故事开始的地方
@@ -17,9 +19,11 @@ exports.prelude = options => { }
  * is the string in Array a lust, example :   [ 'abc','???' ]
  * 判断数据中的字符串是否是Lust
  */
-exports.isLustForString = (str, options) => {
-    plugin.getResNeeds(str,options)
-    plugin.getResOutputs(str,options)
+exports.isLustForString =async (str, options,LJ) => {
+    var outputs = await plugin.getResOutputs(str,options)
+    if(outputs && outputs.length>0){
+        console.log(str  +  ' | '+ JSON.stringify(LJ.LJ))
+    }
     return false
 }
 
@@ -33,7 +37,7 @@ exports.getLustForString = function (str, options) { return {} }
  * is the Object in Arry a lust  ,example : [{ isLust: true, hello: ' world'}]
  * 判断数组中对象是否是Lust
  */
-exports.isLustForObject = (obj, options) => { return false }
+exports.isLustForObject =  (obj, options) => { return false }
 
 /**
  * get lustInfo from Object when isLustForObject is true
@@ -46,12 +50,17 @@ exports.getLustForObject = (obj, options) => { return {} }
  * is the node of json  a lust , example : { '???':{ 'hello': 'world'}}
  * 判断json中的节点是否是lust
  */
-exports.isLustForKV = (k, v, options) => {
-    plugin.getResNeeds(k,options)
-    plugin.getResOutputs(k,options)
-    if (v && utils.Type.isString(v)) {
-        plugin.getResNeeds(v,options)
-        plugin.getResOutputs(v,options)
+exports.isLustForKV = async (k, v, options,LJ) => {
+    // await getNeeds(k,options)
+    // await getOutputsForKey(k,options)
+    // if (v && utils.Type.isString(v)) {
+    //     await getNeeds(v,options)
+    //     await getOutputs(v,options)
+    // }
+
+    var outputs = (await plugin.getResOutputsForKey(k,options))
+    if(outputs && outputs.length>0){
+        console.log(k + '  | ' + JSON.stringify(LJ.LJ))
     }
     return false
 }
