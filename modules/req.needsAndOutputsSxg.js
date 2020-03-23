@@ -5,6 +5,19 @@ const utils = require('lisa.utils')
 const pulgin =require('../plugins/default')
 
 
+var getNeeds = async (str,options) =>{
+    options  = options || {}
+    options.$ = options.$ || []
+    var needs = await pulgin.getReqNeeds(str,options)
+    if(needs && needs.length>0){
+        needs.forEach(ele=>{
+            var s = ele.replace(/\{?\}?/g,'')
+            if(!utils.ArrayContains(options.$,s))
+                options.$.push(s)
+        })
+    }
+}
+
 
 /**
  * here is the start
@@ -18,8 +31,8 @@ exports.prelude = options=>{}
  * is the string in Array a lust, example :   [ 'abc','???' ]
  * 判断数据中的字符串是否是Lust
  */
-exports.isLustForString = (str,options) =>{ 
-    pulgin.getReqNeeds(str,options)
+exports.isLustForString = async (str,options) =>{ 
+    await getNeeds(str,options)
     return false 
 }
 
@@ -46,10 +59,10 @@ exports.getLustForObject =(obj,options)=>{ return {} }
  * is the node of json  a lust , example : { '???':{ 'hello': 'world'}}
  * 判断json中的节点是否是lust
  */
-exports.isLustForKV = (k,v,options)=>{ 
-    pulgin.getReqNeeds(k,options)
+exports.isLustForKV = async (k,v,options)=>{ 
+    await getNeeds(k,options)
     if(v && utils.Type.isString(v)){
-        pulgin.getReqNeeds(v,options)
+        await getNeeds(v,options)
     }
     return false
 }

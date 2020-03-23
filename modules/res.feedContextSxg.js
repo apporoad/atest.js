@@ -5,46 +5,6 @@ const utils = require('lisa.utils')
 
 const plugin = require('../plugins/default')
 
-var getNeeds = async (str,options) =>{
-    options  = options || {}
-    options.$ = options.$ || []
-    var needs = await plugin.getResNeeds(str,options)
-    if(needs && needs.length>0){
-        needs.forEach(ele=>{
-            var s = ele.replace(/\{?\}?/g,'')
-            if(!utils.ArrayContains(options.$,s))
-                options.$.push(s)
-        })
-    }
-}
-
-
-var getOutputs = async (str,options) =>{
-    options  = options || {}
-    options.$out = options.$out || []
-    var needs = await plugin.getResOutputs(str,options)
-    if(needs && needs.length>0){
-        needs.forEach(ele=>{
-            var val = (utils.startWith(ele,'$') ? '' : '$')  + ele.replace('{', '').replace('}', '')
-            if (!utils.ArrayContains(options.$out, val))
-                options.$out.push(val)
-        })
-    }
-}
-
-var getOutputsForKey = async (str,options) =>{
-    options  = options || {}
-    options.$out = options.$out || []
-    var needs = await plugin.getResOutputsForKey(str,options)
-    if(needs && needs.length>0){
-        needs.forEach(ele=>{
-            var val = (utils.startWith(ele,'$') ? '' : '$') + ele.replace('{', '').replace('}', '')
-            if (!utils.ArrayContains(options.$out, val))
-                options.$out.push(val)
-        })
-    }
-}
-
 /**
  * here is the start
  * 故事开始的地方
@@ -57,9 +17,9 @@ exports.prelude = options => { }
  * is the string in Array a lust, example :   [ 'abc','???' ]
  * 判断数据中的字符串是否是Lust
  */
-exports.isLustForString =async (str, options) => {
-    await getNeeds(str,options)
-    await getOutputs(str,options)
+exports.isLustForString = (str, options) => {
+    plugin.getResNeeds(str,options)
+    plugin.getResOutputs(str,options)
     return false
 }
 
@@ -86,12 +46,12 @@ exports.getLustForObject = (obj, options) => { return {} }
  * is the node of json  a lust , example : { '???':{ 'hello': 'world'}}
  * 判断json中的节点是否是lust
  */
-exports.isLustForKV = async (k, v, options) => {
-    await getNeeds(k,options)
-    await getOutputsForKey(k,options)
+exports.isLustForKV = (k, v, options) => {
+    plugin.getResNeeds(k,options)
+    plugin.getResOutputs(k,options)
     if (v && utils.Type.isString(v)) {
-        await getNeeds(v,options)
-        await getOutputs(v,options)
+        plugin.getResNeeds(v,options)
+        plugin.getResOutputs(v,options)
     }
     return false
 }

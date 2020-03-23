@@ -57,21 +57,54 @@ var fnOutputs = (str) =>{
     }
 }
 
-fnOutputs("!p1>$")
-fnOutputs("p2>$" )
-fnOutputs("p3>$param3")
-fnOutputs("p4>${param3}")
-fnOutputs(">$p5.5")
-fnOutputs("gghgh>${p5.6,3,2}mhkj")
+// fnOutputs("!p1>$")
+// fnOutputs("p2>$" )
+// fnOutputs("p3>$param3")
+// fnOutputs("p4>${param3}")
+// fnOutputs(">$p5.5")
+// fnOutputs("gghgh>${p5.6,3,2}mhkj")
 
-fnOutputs("gghgh>${p5.6,3,2}mhk>${p5.7,3,2}j")
+// fnOutputs("gghgh>${p5.6,3,2}mhk>${p5.7,3,2}j")
 
-fnOutputs(">$" )
-fnOutputs("!>$" )
-fnOutputs("p4>${param3}|32")
-fnOutputs("p3>$param3@sdf")
-fnOutputs("p4>$|")
+// fnOutputs(">$" )
+// fnOutputs("!>$" )
+// fnOutputs("p4>${param3}|32")
+// fnOutputs("p3>$param3@sdf")
+// fnOutputs("p4>$|")
 
+var fnOutputsForKey = (str) =>{
+    var iTest = (reg,str,getReg) =>{
+        var is = reg.test(str)
+        var value = ''
+        if(is){
+            if(getReg)
+                value ='$' + str.match(getReg)
+        }
+        else 
+            return
+        console.log(str  + ' : ' + is  + ' : ' + value)
+    }
+    if(str.indexOf('>$')> -1){
+        // "!p1>$"   "p2>$" 
+        iTest(/[a-zA-Z0-9_\.]>\$$/,str, /[a-zA-Z0-9_\.]*(?=>\$)/)
+        iTest(/.+>\$[a-zA-Z0-9_\.\{\}]*$/,str,/(?<=>\$)[a-zA-Z0-9_\.\{\}]*/g)
+    }
+}
+
+fnOutputsForKey("!p1>$")
+fnOutputsForKey("p2>$" )
+fnOutputsForKey("p3>$param3")
+fnOutputsForKey("p4>${param3}")
+fnOutputsForKey(">$p5.5")
+fnOutputsForKey("gghgh>${p5.6,3,2}mhkj")
+
+fnOutputsForKey("gghgh>${p5.6,3,2}mhk>${p5.7,3,2}j")
+
+fnOutputsForKey(">$" )
+fnOutputsForKey("!>$" )
+fnOutputsForKey("p4>${param3}|32")
+fnOutputsForKey("p3>$param3@sdf")
+fnOutputsForKey("p4>$|")
 
 
 
