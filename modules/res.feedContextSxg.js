@@ -5,6 +5,7 @@ const utils = require('lisa.utils')
 
 const plugin = require('../plugins/default')
 
+const ljson = require('lisa.json')
 
 
 /**
@@ -19,10 +20,16 @@ exports.prelude = options => { }
  * is the string in Array a lust, example :   [ 'abc','???' ]
  * 判断数据中的字符串是否是Lust
  */
-exports.isLustForString =async (str, options,LJ) => {
-    var outputs = await plugin.getResOutputs(str,options)
-    if(outputs && outputs.length>0){
-        console.log(str  +  ' | '+ JSON.stringify(LJ.LJ))
+exports.isLustForString = async (str, options, LJ) => {
+    var outputs = await plugin.getResOutputs(str, options)
+    if (outputs && outputs.length > 0) {
+        for(var i =0 ;i<outputs.length ;i ++){
+            var element = outputs[i]
+             // console.log(str  + '  |  ' + outputs[0]+  ' | '+ JSON.stringify(LJ.LJ))
+            var realKey = element.replace('{', '').replace('}', '')
+            //console.log('sdfsdf : ' +LJ.LJ.dotTree)
+            options.context[realKey] = await Promise.resolve( plugin.drawRealValue(str, ljson(options.resData).get(LJ.LJ.dotTree), element))
+        }
     }
     return false
 }
@@ -37,7 +44,7 @@ exports.getLustForString = function (str, options) { return {} }
  * is the Object in Arry a lust  ,example : [{ isLust: true, hello: ' world'}]
  * 判断数组中对象是否是Lust
  */
-exports.isLustForObject =  (obj, options) => { return false }
+exports.isLustForObject = (obj, options) => { return false }
 
 /**
  * get lustInfo from Object when isLustForObject is true
@@ -50,7 +57,7 @@ exports.getLustForObject = (obj, options) => { return {} }
  * is the node of json  a lust , example : { '???':{ 'hello': 'world'}}
  * 判断json中的节点是否是lust
  */
-exports.isLustForKV = async (k, v, options,LJ) => {
+exports.isLustForKV = async (k, v, options, LJ) => {
     // await getNeeds(k,options)
     // await getOutputsForKey(k,options)
     // if (v && utils.Type.isString(v)) {
@@ -58,9 +65,14 @@ exports.isLustForKV = async (k, v, options,LJ) => {
     //     await getOutputs(v,options)
     // }
 
-    var outputs = (await plugin.getResOutputsForKey(k,options))
-    if(outputs && outputs.length>0){
-        console.log(k + '  | ' + JSON.stringify(LJ.LJ))
+    var outputs = (await plugin.getResKeyOutputsPairForKey(k, options))
+    if (outputs && outputs.length > 0) {
+        //console.log(k +   ' | '  + outputs[0] +'   |  ' + JSON.stringify(LJ.LJ))
+        var pair = outputs[0]
+        options.context[pair.output] = await plugin.drawRealValue(k,
+            ljson(options.resData).get(LJ.LJ.dotTree.replace('???', utils.startTrim(pair.key, '$'))),
+            pair.output)
+        return true
     }
     return false
 }
@@ -69,13 +81,17 @@ exports.isLustForKV = async (k, v, options,LJ) => {
  * get lustInfo from node of json when isLustForKV is true
  * 获取lust 
  */
-exports.getLustForKV = (k, v, options) => { return {} }
+exports.getLustForKV = async (k, v, options, LJ) => {
+    var outputs = (await plugin.getResKeyOutputsPairForKey(k, options))
+    var pair = outputs[0]
+    return utils.startTrim(pair.key, '$')
+}
 
 /**
  * is the node of other  a lust , example :  ()=>{}
  * 判断json中的节点是否是lust
  */
-exports.isLustForOthers = (k, v, options) => { return k === "???" }
+exports.isLustForOthers = (k, v, options) => { return false }
 
 /**
  * get lustInfo from node of json when isLustForOthers is true
@@ -110,11 +126,7 @@ exports.afterSatifyAllLust = (lustJson, options) => {
  * core logic @ sex girl, get real value for a lust
  */
 exports.getInputOneLustValue = (lustInfo, lastData, options) => {
-    return new Promise((r, j) => {
-        r({
-            hello: 'good good day'
-        })
-    })
+    return lustInfo.value
 }
 
 /**
@@ -126,8 +138,8 @@ exports.validateOneLustInfo = (value, lustInfo, lastData, options) => {
         r({
             isPass: true,   // important result ,  will reRun when false
             isKeepLust: false, // nullable, when true , the lust won't be deleted
-            key: 'your new json node name', // nullable， only you need change your key in json
-            value: "???"  // important result , your real value against lust
+            key: value,// nullable， only you need change your key in json
+            value: lustInfo.LJ.object[lustInfo.LJ.key] // important result , your real value against lust
         })
     })
 }

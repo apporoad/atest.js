@@ -6,19 +6,19 @@ var lustJson ={
     data1 : {
         "!p1>$" : null,
         p2 : "![1,100]",
-        "p3>$param3" : "!(1,3,4)",
+        "p3>$param3" : "asdfsdf>${pp3}",
         p4 : "!=${abc}",
         "p${p1}5" : ($) => { return true},
         "$p3" : ($) => { return true},
         "p5.5" : ">$p5.5",
-        "p5.6" : "gghgh>${p5.6,3,2}mhkj",
+        "p5.6" : "ggh>${}hh=>${p5.6}mh>${p5.7}kjaaaaaaaaaaaaaaaa>${p5.8}cccccccc",
         p6 : "!!",
         "!p7" :  {
             p71 : "!",
             p72 : "!>12",
             p73 : "!=^.rp2"
         },
-        's7' : [ 'gghgh>${s7}mhkj'],
+        's7' : [ 'ggh${}gh>${s7}mh>${s8}kj'],
         "p7.5" : "!=$.p4",
         p9 : /ab*/g,
         p8 : [{
@@ -59,13 +59,14 @@ var resData = {
         "p${p1}5" : true,
         "$p3" : true,
         "p5.5" : " here is p5.5",
-        "p5.6" : "gghghxxxxmhkj",
+        "p5.6" : "gghccchh=abcdefgmhaaaaaaakj",
         p6 : "abc",
         "p7" :  {
             p71 : 2,
             p72 : 32,
             p73 : 21
         },
+        "s7" :[ 'hello'],
         "p7.5" : 56,
         p9 : /ab*/g,
         p8 : [{
@@ -103,6 +104,7 @@ var options = {
     context : context
 }
 
-LJ.get(lustJson,sxg,options).then(()=>{
+LJ.get(lustJson,sxg,options).then(json=>{
     console.log(context)
+    //console.log(json)
 })
