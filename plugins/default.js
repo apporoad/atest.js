@@ -149,6 +149,8 @@ exports.drawRealValue = async (expression , matchValue,output )=>{
                 }
                 if(be > bi && bi> -1 ){
                     return matchValue.substring(bi +before.length,be-1)
+                }else{
+                    return null
                 }
                 // else if(be ==-1 && bi > -1){
                 //     return matchValue.substring(bi + before.length)
@@ -158,3 +160,4 @@ exports.drawRealValue = async (expression , matchValue,output )=>{
     }
     return matchValue
 }
+
