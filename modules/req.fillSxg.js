@@ -20,17 +20,11 @@ exports.prelude = options => { }
  * 判断数据中的字符串是否是Lust
  */
 exports.isLustForString = async (str, options, LJ) => {
-    // var outputs = await plugin.getResOutputs(str, options)
-    // if (outputs && outputs.length > 0) {
-    //     for(var i =0 ;i<outputs.length ;i ++){
-    //         var element = outputs[i]
-    //          // console.log(str  + '  |  ' + outputs[0]+  ' | '+ JSON.stringify(LJ.LJ))
-    //         var realKey = element.replace('{', '').replace('}', '')
-    //         //console.log('sdfsdf : ' +LJ.LJ.dotTree)
-    //         options.context[realKey] = await Promise.resolve( plugin.drawRealValue(str, ljson(options.resData).get(LJ.LJ.dotTree), element))
-    //     }
-    // }
-    //todo
+    var outputs = (await plugin.getReqNeeds(str, options))
+    if (outputs && outputs.length > 0) {
+        //console.log(k +   ' | '  + outputs[0] +'   |  ' + JSON.stringify(LJ.LJ))
+        return true
+    }
     return false
 }
 
@@ -38,7 +32,22 @@ exports.isLustForString = async (str, options, LJ) => {
  * get lustInfo from String when isLustForString is true
  * 获取lust from String
  */
-exports.getLustForString = function (str, options) { return {} }
+exports.getLustForString = async function (str, options, LJ) {
+    var outputs = (await plugin.getReqNeeds(str, options))
+
+    var result = str
+    // 如果  单纯 $abc 情况
+    if(outputs.length == 1 && outputs[0] == str){
+        return ljson(options.context).get(outputs[0].replace('{', '').replace('}', '')) 
+    }
+    // 多个 asb${abc}sfds${ccc}sfdsf  情况
+    for (var i = 0; i < outputs.length; i++) {
+        var op = outputs[i]
+        var val = ljson(options.context).get(op.replace('{', '').replace('}', '')) || ''
+        result = result.replace(new RegExp(op.replace('$', '\\$').replace('{', '\\{').replace('}', '\\}'), 'gm'), val)
+    }
+    return result
+}
 
 /**
  * is the Object in Arry a lust  ,example : [{ isLust: true, hello: ' world'}]
@@ -58,20 +67,9 @@ exports.getLustForObject = (obj, options) => { return {} }
  * 判断json中的节点是否是lust
  */
 exports.isLustForKV = async (k, v, options, LJ) => {
-    // await getNeeds(k,options)
-    // await getOutputsForKey(k,options)
-    // if (v && utils.Type.isString(v)) {
-    //     await getNeeds(v,options)
-    //     await getOutputs(v,options)
-    // }
-
     var outputs = (await plugin.getReqNeeds(k, options))
     if (outputs && outputs.length > 0) {
         //console.log(k +   ' | '  + outputs[0] +'   |  ' + JSON.stringify(LJ.LJ))
-        // var pair = outputs[0]
-        // options.context[pair.output] = await plugin.drawRealValue(k,
-        //     ljson(options.resData).get(LJ.LJ.dotTree.replace('???', utils.startTrim(pair.key, '$'))),
-        //     pair.output)
         return true
     }
     return false
@@ -82,16 +80,10 @@ exports.isLustForKV = async (k, v, options, LJ) => {
  * 获取lust 
  */
 exports.getLustForKV = async (k, v, options, LJ) => {
-
-
     var outputs = (await plugin.getReqNeeds(k, options))
-    //console.log(k +   ' | '  + outputs[0] +'   |  ' + JSON.stringify(LJ.LJ))
-    // var pair = outputs[0]
-    // options.context[pair.output] = await plugin.drawRealValue(k,
-    //     ljson(options.resData).get(LJ.LJ.dotTree.replace('???', utils.startTrim(pair.key, '$'))),
-    //     pair.output)
-    var val = (ljson(options.context).get(outputs[0].replace('{','').replace('}','')) || '') + ''
-    return k.replace(outputs[0],val)
+    //key 时 默认 为字符串，不做校验
+    var val = (ljson(options.context).get(outputs[0].replace('{', '').replace('}', '')) || '') + ''
+    return k.replace(outputs[0], val)
 
 }
 
@@ -142,18 +134,25 @@ exports.getInputOneLustValue = (lustInfo, lastData, options) => {
  * method after getInputOneLustValue
  */
 exports.validateOneLustInfo = (value, lustInfo, lastData, options) => {
-
-    if(value)
-        return {
+    if (lustInfo.LJ.isKey) {
+        if (value)
+            return {
                 isPass: true,   // important result ,  will reRun when false
                 isKeepLust: false, // nullable, when true , the lust won't be deleted
                 key: value || null,// nullable， only you need change your key in json
                 value: lustInfo.LJ.object[lustInfo.LJ.key] // important result , your real value against lust
             }
-    else 
-        return{
+        else
+            return {
+                isPass: true,
+                isKeepLust: false,
+                key: lustInfo.LJ.key
+            }
+    }else{
+        return {
             isPass : true,
-            isKeepLust : false,
-            key : lustInfo.LJ.key
+            isKeepLust: false,
+            value : value
         }
+    }
 }
