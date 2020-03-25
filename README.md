@@ -20,3 +20,8 @@ api test , awesome one
 
 ## 转义
 $  : $$
+
+
+## todos
+check 和 draw 可分离
+draw 支持 搜索方式

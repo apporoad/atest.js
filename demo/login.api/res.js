@@ -1,6 +1,6 @@
 
 module.exports = {
-    token : "$token"
+    token : ">$token"
 }
 
 //module.exports = "$tokenObj"

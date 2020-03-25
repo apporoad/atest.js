@@ -7,6 +7,7 @@ const resNeedsAndOutputSxy = require('./res.needsAndOutputsSxg')
 const LustJson = require('lustjson.js')
 const reqTranslateSxg =require('./req.translateSxg')
 const resTranslateSxg = require('./res.translateSxg')
+const plugin = require('../plugins/default')
 
 
 var translateMeta = async (meta, context, options) => {
@@ -29,6 +30,7 @@ exports.translateReq = async (instance , context , options) =>{
     if (!instance) return
     if (instance.req) {
         var req = instance.req
+        // 处理 req 外部
         if (utils.Type.isAsyncFunction(instance.req)) {
             try {
                 req = await instance.req(context, options)
@@ -54,7 +56,7 @@ exports.translateReq = async (instance , context , options) =>{
         }
         if (req) {
             var req = await Promise.resolve(req)
-            //translate req json 
+            //translate req json  处理req的内部json
             if(utils.Type.isObject(req)){
                 var ops = {
                     context : context,
@@ -62,7 +64,7 @@ exports.translateReq = async (instance , context , options) =>{
                 }
                 req = await LustJson.get(req,reqTranslateSxg,ops)
             }
-            instance.realReq =    req
+            instance.realReq = req
         }
     }
     //metas
@@ -350,4 +352,11 @@ var getOrderedInstances = async (testingInstance, allInstances, context, options
 exports.getOrderedInstances = getOrderedInstances
 
 exports.getInvokChain = getInvokChain
+
+
+exports.fillReq = async (req ,context, options)=>{
+    if(utils.Type.isString(req)){
+        plugin.get
+    }
+}
 

@@ -8,7 +8,7 @@
             "type": "node",
             "request": "launch",
             "name": "Launch Program",
-            "program": "${workspaceFolder}/test/test.reqfillSxg.js"
+            "program": "${workspaceFolder}/test.js"
         }
     ]
 }
