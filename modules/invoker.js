@@ -1,6 +1,5 @@
 var needle = require('needle')
 var utils = require('lisa.utils')
-var path = require('path')
 
 
 
@@ -11,6 +10,7 @@ exports.req = (method,url,data,options)=>{
 
 exports.checkInstance = instance =>{
     // check url
+    return true
 }
 
 
@@ -20,7 +20,13 @@ exports.invokeInstance = async (instance, context,options) =>{
             return 
         }
         var method = instance.realMeta. method || 'get'
-        var url  = utils.startWith(instance.realMeta.url,'http') ? instance.realMeta.url  :  path.join(instance.realMeta.baseUrl , instance.realMeta.url)
-
-        return result = await exports.req(method,url, instance.realReq,options)    
+        var url  = utils.startWith(instance.realMeta.url,'http') ? instance.realMeta.url  :  utils.endTrim(instance.realMeta.baseUrl,'/' ) +'/'  + utils.startTrim(instance.realMeta.url,'/')
+        try{
+            //todo
+            var result = await exports.req(method,url, instance.realReq.data,options)    
+        }catch(e){
+            //console.log(e)
+        }
+        //console.log(result)
+        return result.body
 }

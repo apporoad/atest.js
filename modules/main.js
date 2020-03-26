@@ -19,7 +19,7 @@ exports.atest = async (testingInstances,allInstances,context,options)=>{
     var orderedInstances = await instanceMan.getOrderedInstances(testingInstances,allInstances,  context ,options)
     
     // 2.  go run
-    for(var index =0 ;index< orderedInstances.chain.length;i++){
+    for(var index =0 ;index< orderedInstances.chain.length; index++){
         var instance = orderedInstances.chain[index]
         //translate first  转换掉内部函数
         await instanceMan.translateReq(instance,context,options)

@@ -1,3 +1,4 @@
 {
-    "hello" :{}
+    "hello" :{},
+    "baseUrl" : "http://localhost:11540"
 }

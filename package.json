@@ -4,7 +4,7 @@
   "description": "api test",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest"
   },
   "repository": {
     "type": "git",
@@ -25,13 +25,16 @@
     "commander": "^5.0.0",
     "find": "^0.3.0",
     "ilink.js": "^1.2.1",
-    "lisa.json": "^1.1.0",
+    "lisa.json": "^1.2.0",
     "lisa.utils": "^1.2.0",
     "locale.node": "^1.0.0",
-    "lustjson.js": "^2.1.1",
+    "lustjson.js": "^2.1.2",
     "needle": "^2.3.3"
   },
-  "bin":{
-    "atest" : "./modules/cli.js"
+  "bin": {
+    "atest": "./modules/cli.js"
+  },
+  "devDependencies": {
+    "jest": "^25.2.0"
   }
 }

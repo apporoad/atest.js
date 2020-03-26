@@ -1,4 +1,5 @@
 const utils = lisaUtils = require('lisa.utils')
+const ljson = require('lisa.json')
 
 const ilinkOptions = {
     searchScope : 1,
@@ -165,21 +166,19 @@ exports.drawRealValue = async (expression , matchValue,output )=>{
 /**
  *  用context 填充字符串
  */
-exports.fillNeedsForString = async (str,context,fnGeReqNeeds)=>{
-    //todo
-    if(!fnGeReqNeeds) return null
-
+exports.fillNeedsForString = async (str,context,fnGeReqNeeds,options)=>{
+    fnGeReqNeeds = fnGeReqNeeds || exports.getReqNeeds
     var needs = (await Promise.resolve(fnGeReqNeeds(str, options)))
-
     var result = str
     // 如果  单纯 $abc 情况
     if(needs.length == 1 && needs[0] == str){
-        return ljson(options.context).get(needs[0].replace('{', '').replace('}', '')) 
+        return ljson(context).get(needs[0].replace('{', '').replace('}', '')) 
     }
     // 多个 asb${abc}sfds${ccc}sfdsf  情况
-    for (var i = 0; i < outputs.length; i++) {
-        var op = outputs[i]
-        var val = ljson(options.context).get(op.replace('{', '').replace('}', '')) || ''
+    for (var i = 0; i < needs.length; i++) {
+        var op = needs[i]
+        var val = ljson(context).get(op.replace('{', '').replace('}', '')) || ''
         result = result.replace(new RegExp(op.replace('$', '\\$').replace('{', '\\{').replace('}', '\\}'), 'gm'), val)
     }
+    return result
 }

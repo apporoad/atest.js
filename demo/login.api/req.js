@@ -1,10 +1,11 @@
 
 
 exports.meta = {
-    url : "/pms/api/login"
+    url : "/auth/login",
+    method : "post"
 }
 
 exports.data = {
-    username : "???(string)[${username}]输入你的用户名",
-    password : "???(string)[${passwd}]输入你的密码"
+    username : "${username}",
+    pwd : "$password"
 }   
