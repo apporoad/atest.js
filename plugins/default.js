@@ -172,7 +172,8 @@ exports.fillNeedsForString = async (str,context,fnGeReqNeeds,options)=>{
     var result = str
     // 如果  单纯 $abc 情况
     if(needs.length == 1 && needs[0] == str){
-        return ljson(context).get(exports.getRealNeed(needs[0])) 
+        // ??? 用于uicli
+        return ljson(context).get(exports.getRealNeed(needs[0]))  || '???'
     }
     // 多个 asb${abc}sfds${ccc}sfdsf  情况
     for (var i = 0; i < needs.length; i++) {
@@ -180,7 +181,7 @@ exports.fillNeedsForString = async (str,context,fnGeReqNeeds,options)=>{
         var val = ljson(context).get(exports.getRealNeed(op)) || ''
         result = result.replace(new RegExp(op.replace('$', '\\$').replace('{', '\\{').replace('}', '\\}'), 'gm'), val)
     }
-    return result
+    return result || '???'
 }
 
 /**

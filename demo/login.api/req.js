@@ -2,7 +2,8 @@
 
 exports.meta = {
     url : "/auth/login",
-    method : "post"
+    method : "post",
+    roes : "${rose}"
 }
 
 exports.data = {

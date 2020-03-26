@@ -59,7 +59,7 @@ exports.getLustForObject =(obj,options)=>{ return {} }
  * is the node of json  a lust , example : { '???':{ 'hello': 'world'}}
  * 判断json中的节点是否是lust
  */
-exports.isLustForKV = async (k,v,options)=>{ 
+exports.isLustForKV = async (k,v,options,LJ)=>{ 
     await getNeeds(k,options)
     if(v && utils.Type.isString(v)){
         await getNeeds(v,options)

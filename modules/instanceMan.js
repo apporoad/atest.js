@@ -7,6 +7,7 @@ const resNeedsAndOutputSxy = require('./res.needsAndOutputsSxg')
 const LustJson = require('lustjson.js')
 const reqTranslateSxg =require('./req.translateSxg')
 const resTranslateSxg = require('./res.translateSxg')
+const atestUtils = require('./atestUtil')
 const plugin = require('../plugins/default')
 
 
@@ -162,34 +163,35 @@ exports.preduleInstance = async (instance, context, options) => {
     //here resolve the  async function  and function   and promise ...    
     await exports.translateInstance(instance, context, options)
     // get needs and outpus
-    var tempOption = { $: [], $out: [] }
-    if (instance.realMeta)
-        await LustJson.get(instance.realMeta, reqNeedsAndOutpusSxy, tempOption)
+    var needs = []
+    var outpus = []
+    // var tempOption = { $: [], $out: [] }
+    if (instance.realMeta){
+        needs = needs.concat(await atestUtils.getReqNeeds(instance.realMeta))
+        //await LustJson.get(instance.realMeta, reqNeedsAndOutpusSxy, tempOption)
+    }
     if (instance.realReq) {
-        if (utils.Type.isString(instance.realReq)) {
-            //todo
-        } else if (utils.Type.isObject(instance.req)) {
-            await LustJson.get(instance.realReq, reqNeedsAndOutpusSxy, tempOption)
-        } else {
-            //todo 
-        }
+        needs = needs.concat(await atestUtils.getReqNeeds(instance.realReq))
+        // if (utils.Type.isString(instance.realReq)) {
+        //     //todo
+        // } else if (utils.Type.isObject(instance.req)) {
+        //     await LustJson.get(instance.realReq, reqNeedsAndOutpusSxy, tempOption)
+        // } else {
+        //     //todo 
+        // }
     }
 
     if (instance.realRes) {
-        if (utils.Type.isObject(instance.realRes)) {
-            await LustJson.get(instance.realRes, resNeedsAndOutputSxy, tempOption)
-        }else if( utils.Type.isString(instance.realRes)){
-            //todo
-        }
+        needs = needs.concat(await atestUtils.getResNeeds(instance.realRes))
+        outpus = await atestUtils.getResOutputs(instance.realRes)
+        // if (utils.Type.isObject(instance.realRes)) {
+        //     await LustJson.get(instance.realRes, resNeedsAndOutputSxy, tempOption)
+        // }else if( utils.Type.isString(instance.realRes)){
+        //     //todo
+        // }
     }
-    instance.needs = tempOption.$
-    instance.outputs = tempOption.$out
-    // r({
-    //     id: '',
-    //     instance: {},
-    //     needs: [],
-    //     outputs: []
-    // })
+    instance.needs = needs
+    instance.outputs = outpus
     return instance
 }
 

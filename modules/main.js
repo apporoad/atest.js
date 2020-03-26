@@ -28,7 +28,8 @@ exports.atest = async (testingInstances,allInstances,context,options)=>{
         instance.realMeta = await atestUtils.fillReq(instance.realMeta,context)
         //feed req
         instance.realReq = await atestUtils.fillReq(instance.realReq,context)
-        // find unfeed
+        // 解决没有满足的need
+        //todo uicli
         
         //get resData
         var resData = await invoker.invokeInstance(instance,context,options)

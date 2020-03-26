@@ -8,6 +8,7 @@
             "type": "node",
             "request": "launch",
             "name": "Launch Program",
+            //"program": "${workspaceFolder}/modules/atestUtil.test.js"
             "program": "${workspaceFolder}/testAtest.js"
         }
     ]
