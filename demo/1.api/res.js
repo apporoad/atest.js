@@ -27,9 +27,9 @@ module.exports ={
             }
         },
         p11 : (res,req,context)=>{
-            console.log(context)
-            console.log(res)
-            console.log(req)
+            // console.log(context)
+            // console.log(res)
+            // console.log(req)
             return new Promise((r,j)=>{
                 setTimeout(()=>{
                     r(true)

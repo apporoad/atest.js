@@ -28,6 +28,8 @@ exports.atest = async (testingInstances,allInstances,context,options)=>{
         instance.realMeta = await atestUtils.fillReq(instance.realMeta,context)
         //feed req
         instance.realReq = await atestUtils.fillReq(instance.realReq,context)
+        // find unfeed
+        
         //get resData
         var resData = await invoker.invokeInstance(instance,context,options)
         // todo  根据resData 检查数据 及反填context
