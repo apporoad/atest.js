@@ -9,6 +9,7 @@ const instanceMan = require('./instanceMan')
 const contextMan = require('./contextMan')
 const utils = require('lisa.utils')
 const invoker  = require('./invoker')
+const atestUtils = require('./atestUtil')
 
 /**
  * run atest
@@ -23,8 +24,10 @@ exports.atest = async (testingInstances,allInstances,context,options)=>{
         var instance = orderedInstances.chain[index]
         //translate first  转换掉内部函数
         await instanceMan.translateReq(instance,context,options)
+        //feed meta
+        instance.realMeta = await atestUtils.fillReq(instance.realMeta,context)
         //feed req
-        
+        instance.realReq = await atestUtils.fillReq(instance.realReq,context)
         //get resData
         var resData = await invoker.invokeInstance(instance,context,options)
         // todo  根据resData 检查数据 及反填context

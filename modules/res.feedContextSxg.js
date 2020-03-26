@@ -28,7 +28,7 @@ exports.isLustForString = async (str, options, LJ) => {
              // console.log(str  + '  |  ' + outputs[0]+  ' | '+ JSON.stringify(LJ.LJ))
             var realKey = element.replace('{', '').replace('}', '')
             //console.log('sdfsdf : ' +LJ.LJ.dotTree)
-            options.context[realKey] = await Promise.resolve( plugin.drawRealValue(str, ljson(options.resData).get(LJ.LJ.dotTree), element))
+            options.context[realKey] = await Promise.resolve(plugin.drawRealValue(str, ljson(options.resData).get(LJ.LJ.dotTree), element))
         }
     }
     return false

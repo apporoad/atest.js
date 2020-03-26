@@ -9,7 +9,8 @@ exports.fillReq =async (req, context)=>{
         if(utils.Type.isObject(req)){
             return await LJ.get(req, reqFillSxg, { context : context})
         }else if(utils.Type.isString(req)){
-            //todo
+            return plugin.fillNeedsForString(req,context,null,null)
         }
     }
+    return req
 }

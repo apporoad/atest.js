@@ -172,13 +172,22 @@ exports.fillNeedsForString = async (str,context,fnGeReqNeeds,options)=>{
     var result = str
     // 如果  单纯 $abc 情况
     if(needs.length == 1 && needs[0] == str){
-        return ljson(context).get(needs[0].replace('{', '').replace('}', '')) 
+        return ljson(context).get(exports.getRealNeed(needs[0])) 
     }
     // 多个 asb${abc}sfds${ccc}sfdsf  情况
     for (var i = 0; i < needs.length; i++) {
         var op = needs[i]
-        var val = ljson(context).get(op.replace('{', '').replace('}', '')) || ''
+        var val = ljson(context).get(exports.getRealNeed(op)) || ''
         result = result.replace(new RegExp(op.replace('$', '\\$').replace('{', '\\{').replace('}', '\\}'), 'gm'), val)
     }
     return result
+}
+
+/**
+ *  ${abc.22} => abc.22
+ */
+exports.getRealNeed = need =>{
+    if(need == undefined || need ==null)
+        return null
+    return need.replace(/\$|\{|\}/g,'')
 }

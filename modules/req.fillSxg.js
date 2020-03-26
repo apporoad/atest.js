@@ -33,20 +33,8 @@ exports.isLustForString = async (str, options, LJ) => {
  * 获取lust from String
  */
 exports.getLustForString = async function (str, options, LJ) {
-    var outputs = (await plugin.getReqNeeds(str, options))
 
-    var result = str
-    // 如果  单纯 $abc 情况
-    if(outputs.length == 1 && outputs[0] == str){
-        return ljson(options.context).get(outputs[0].replace('{', '').replace('}', '')) 
-    }
-    // 多个 asb${abc}sfds${ccc}sfdsf  情况
-    for (var i = 0; i < outputs.length; i++) {
-        var op = outputs[i]
-        var val = ljson(options.context).get(op.replace('{', '').replace('}', '')) || ''
-        result = result.replace(new RegExp(op.replace('$', '\\$').replace('{', '\\{').replace('}', '\\}'), 'gm'), val)
-    }
-    return result
+    return plugin.fillNeedsForString(str,options.context,null,options)
 }
 
 /**
@@ -82,7 +70,7 @@ exports.isLustForKV = async (k, v, options, LJ) => {
 exports.getLustForKV = async (k, v, options, LJ) => {
     var outputs = (await plugin.getReqNeeds(k, options))
     //key 时 默认 为字符串，不做校验
-    var val = (ljson(options.context).get(outputs[0].replace('{', '').replace('}', '')) || '') + ''
+    var val = (ljson(options.context).get(plugin.getRealNeed(outputs[0])) || '') + ''
     return k.replace(outputs[0], val)
 
 }
@@ -126,7 +114,7 @@ exports.afterSatifyAllLust = (lustJson, options) => {
  * core logic @ sex girl, get real value for a lust
  */
 exports.getInputOneLustValue = (lustInfo, lastData, options) => {
-    return lustInfo.value
+    return lustInfo.value 
 }
 
 /**

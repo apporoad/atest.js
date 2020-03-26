@@ -11,6 +11,7 @@ exports.get = (root,options)=>{
     options = options || {}
     options.timeOut = options.timeOut || defaultOutTimeInterval
     var p = path.join(root,'.atest/context.json')
+    var r = {}
     if(fs.existsSync(p)){
         var json = JSON.parse(fs.readFileSync(p,'utf8'))
         var result = {}
@@ -23,9 +24,14 @@ exports.get = (root,options)=>{
             }
         }
         fs.writeFileSync(p, JSON.stringify(json),'utf8')
-        return result
+        r = result
     }
-    return {}
+
+    // add support context.json
+    if(fs.existsSync(path.join(root,'context.json'))){
+        r = Object.assign(r,JSON.parse(fs.readFileSync(path.join(root,'context.json'),'utf8')))
+    }
+    return r
 }
 
 exports.set = (newContext,root) =>{

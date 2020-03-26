@@ -354,9 +354,4 @@ exports.getOrderedInstances = getOrderedInstances
 exports.getInvokChain = getInvokChain
 
 
-exports.fillReq = async (req ,context, options)=>{
-    if(utils.Type.isString(req)){
-        plugin.get
-    }
-}
 
