@@ -1,5 +1,15 @@
 var atest = require('./modules/main')
 var path = require('path')
 
+it = (title , fn) =>{
+    if(fn)
+      fn()
+  }
+expect = ()=>{
+return {
+    toBe : ()=>{}
+    }
+}
 
-atest.atestOnePath(__dirname + '/demo/login.api')
+require('./modules/atestUtil.test')
+//atest.atestOnePath(__dirname + '/demo/login.api')

@@ -4,6 +4,7 @@ const utils = require('lisa.utils')
 const plugin = require('../plugins/default')
 const reqNeedsAndOutputsSxg = require('./req.needsAndOutputsSxg')
 const resNeedsAndOutputsSxg = require('./res.needsAndOutputsSxg')
+const resFeedContextSxg = require('./res.feedContextSxg')
 
 
 exports.fillReq =async (req, context)=>{
@@ -30,7 +31,6 @@ exports.getReqNeeds =  async (req)=>{
     return needs
 }
 
-
 exports.getResNeeds =  async (res)=>{
     if(!res) return []
     var tempOptions = {$:[], $out : []}
@@ -56,3 +56,27 @@ exports.getResOutputs =  async (res)=>{
     }
     return ops
 }
+
+exports.feedContext = async (context,resData,res)=>{
+    if(!resData) return
+    if(utils.Type.isObject(resData)){
+        var options = {
+            resData : resData,
+            context : context
+        }
+        await LJ.get(resData,resFeedContextSxg,options)
+    }else{
+        var outputs = await plugin.getResOutputs(resData, {})
+        if (outputs && outputs.length > 0) {
+            for(var i =0 ;i<outputs.length ;i ++){
+                var element = outputs[i]
+                var realKey =  plugin.getRealNeed(element)
+                //console.log('sdfsdf : ' +LJ.LJ.dotTree)
+                context[realKey] = await Promise.resolve(plugin.drawRealValue(res, resData, element))
+            }
+        }
+    }
+}
+
+
+

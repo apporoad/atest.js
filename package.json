@@ -29,7 +29,8 @@
     "lisa.utils": "^1.2.0",
     "locale.node": "^1.0.0",
     "lustjson.js": "^2.1.3",
-    "needle": "^2.3.3"
+    "needle": "^2.3.3",
+    "uicli.js": "^1.0.0"
   },
   "bin": {
     "atest": "./modules/cli.js"

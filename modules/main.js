@@ -10,6 +10,7 @@ const contextMan = require('./contextMan')
 const utils = require('lisa.utils')
 const invoker  = require('./invoker')
 const atestUtils = require('./atestUtil')
+const uicli = require('uicli.js')
 
 /**
  * run atest
@@ -30,6 +31,8 @@ exports.atest = async (testingInstances,allInstances,context,options)=>{
         instance.realReq = await atestUtils.fillReq(instance.realReq,context)
         // 解决没有满足的need
         //todo uicli
+        //instance.realMeta =await uicli.uiGetJson(instance.realMeta)
+        //instance.realReq = await uicli.uiGetJson(instance.realReq)
         
         //get resData
         var resData = await invoker.invokeInstance(instance,context,options)

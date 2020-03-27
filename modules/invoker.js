@@ -28,5 +28,5 @@ exports.invokeInstance = async (instance, context,options) =>{
             //console.log(e)
         }
         //console.log(result)
-        return result.body
+        return result ? result.body : null
 }

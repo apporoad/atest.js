@@ -26,7 +26,7 @@ exports.isLustForString = async (str, options, LJ) => {
         for(var i =0 ;i<outputs.length ;i ++){
             var element = outputs[i]
              // console.log(str  + '  |  ' + outputs[0]+  ' | '+ JSON.stringify(LJ.LJ))
-            var realKey = element.replace('{', '').replace('}', '')
+            var realKey = plugin.getRealNeed(element)
             //console.log('sdfsdf : ' +LJ.LJ.dotTree)
             options.context[realKey] = await Promise.resolve(plugin.drawRealValue(str, ljson(options.resData).get(LJ.LJ.dotTree), element))
         }
@@ -69,7 +69,7 @@ exports.isLustForKV = async (k, v, options, LJ) => {
     if (outputs && outputs.length > 0) {
         //console.log(k +   ' | '  + outputs[0] +'   |  ' + JSON.stringify(LJ.LJ))
         var pair = outputs[0]
-        options.context[pair.output] = await plugin.drawRealValue(k,
+        options.context[plugin.getRealNeed(pair.output)] = await plugin.drawRealValue(k,
             ljson(options.resData).get(LJ.LJ.dotTree.replace('???', utils.startTrim(pair.key, '$'))),
             pair.output)
         return true
