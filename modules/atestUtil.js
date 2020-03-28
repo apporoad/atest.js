@@ -64,9 +64,9 @@ exports.feedContext = async (context,resData,res)=>{
             resData : resData,
             context : context
         }
-        await LJ.get(resData,resFeedContextSxg,options)
-    }else{
-        var outputs = await plugin.getResOutputs(resData, {})
+        await LJ.get(res,resFeedContextSxg,options)
+    }else{res
+        var outputs = await plugin.getResOutputs(res, {})
         if (outputs && outputs.length > 0) {
             for(var i =0 ;i<outputs.length ;i ++){
                 var element = outputs[i]

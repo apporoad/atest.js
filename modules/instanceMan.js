@@ -198,6 +198,7 @@ exports.preduleInstance = async (instance, context, options) => {
 var instanceEquils = (a, b) => {
     return a.id == b.id
 }
+exports.instanceEquils = instanceEquils
 
 
 //recurse

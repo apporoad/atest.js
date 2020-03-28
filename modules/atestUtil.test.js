@@ -71,7 +71,7 @@ it('test atestUtil getResOutputs', async () => {
 
 it('test atestUtil feedContext', async () => {
   var context ={}
-  var lustJson ={
+  var res ={
     success : "!",
     data1 : {
         "!p1>$" : null,
@@ -166,10 +166,17 @@ it('test atestUtil feedContext', async () => {
     }
   }
   
-
   await atestUtil.feedContext(context,'ccc=hello&ddd=world&eeee','ccc=>${abc}&ddd=>${dd}&eeee')
   expect(context.abc).toBe('hello')
   expect(context.dd).toBe('world')
+
+  await atestUtil.feedContext(context,resData,res)
+
+  expect(context.p1).toBe('here is p1')
+  expect(context['p5.5']).toBe(' here is p5.5')
+  expect(context.param3).toBe(33)
+  expect(context['p5.6']).toBe("abcdefg")
+
 })
   
 
