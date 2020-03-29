@@ -38,7 +38,7 @@ exports.atest = async (testingInstances,allInstances,context,options)=>{
         var resData = await invoker.invokeInstance(instance,context,options)
         // translate res
         await instanceMan.translateRes(instance,resData,context,options)
-        // todo  根据resData 检查数据 及反填context
+        //  根据resData 检查数据 及反填context
         await atestUtils.feedContext(context,resData,instance.realRes)
         if(utils.ArrayContains(testingInstances,instance,instanceMan.instanceEquils)){
             //do check
